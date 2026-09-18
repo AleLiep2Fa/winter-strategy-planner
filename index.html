@@ -3,390 +3,95 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A Winter strategy planner for pork and garlic ice cream decisions." />
-    <title>Winter Strategy Planner</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230f1d35'/%3E%3Cpath d='M18 45 31 17l15 28H18Z' fill='%23b8f34a'/%3E%3Cpath d='M24 39h16' stroke='%230f1d35' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <meta name="description" content="Rule-checked Winter planning tool for Pork and Garlic Ice Cream Co." />
+    <title>Official Winter Strategy Planner</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e1d35'/%3E%3Cpath d='M18 45 32 17l14 28H18Z' fill='%23c0f653'/%3E%3Cpath d='M24 39h16' stroke='%230e1d35' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
     <style>
-      :root {
-        --ink: #10203b;
-        --ink-soft: #273956;
-        --ice: #eff6ff;
-        --surface: #ffffff;
-        --line: #dbe5f2;
-        --muted: #68778f;
-        --lime: #b8f34a;
-        --lime-deep: #6b920f;
-        --teal: #2cc9b5;
-        --danger: #d85c67;
-        --danger-bg: #fff1f2;
-        --shadow: 0 18px 44px rgba(16, 32, 59, 0.12);
-      }
-
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        min-width: 320px;
-        color: var(--ink);
-        background: linear-gradient(140deg, #eef5ff 0%, #f7fbff 48%, #effcf7 100%);
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      button, input, select { font: inherit; }
-      button { cursor: pointer; }
-
-      .shell { max-width: 1420px; margin: 0 auto; padding: 28px; }
-      .topbar {
-        display: flex; align-items: center; justify-content: space-between; gap: 18px;
-        margin-bottom: 24px;
-      }
-      .brand { display: flex; align-items: center; gap: 13px; }
-      .brand-mark {
-        width: 42px; height: 42px; display: grid; place-items: center;
-        border-radius: 13px; background: var(--ink); color: var(--lime); font-weight: 900; font-size: 1.18rem;
-        box-shadow: 0 9px 20px rgba(16, 32, 59, 0.25);
-      }
-      .eyebrow { margin: 0 0 2px; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime-deep); }
-      h1 { margin: 0; font-size: clamp(1.45rem, 2.5vw, 2.1rem); letter-spacing: -0.035em; }
-      .top-note { margin: 0; color: var(--muted); font-size: 0.9rem; text-align: right; }
-
-      .layout { display: grid; grid-template-columns: minmax(310px, 390px) minmax(0, 1fr); gap: 24px; align-items: start; }
-      .panel, .card { background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(219, 229, 242, 0.95); box-shadow: var(--shadow); }
-      .panel { border-radius: 22px; padding: 22px; }
-      .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 19px; }
-      h2 { margin: 0; font-size: 1.05rem; letter-spacing: -0.015em; }
-      .panel-head p, .small-copy { margin: 5px 0 0; color: var(--muted); font-size: 0.84rem; line-height: 1.45; }
-      .tag { border: 1px solid #d8edaf; background: #f3ffe0; color: #4d7008; font-size: 0.74rem; font-weight: 800; padding: 5px 8px; border-radius: 999px; white-space: nowrap; }
-      .inputs { display: grid; gap: 16px; }
-      .input-group { border-top: 1px solid var(--line); padding-top: 16px; }
-      .input-group:first-child { border-top: 0; padding-top: 0; }
-      .group-title { margin: 0 0 11px; font-size: 0.74rem; font-weight: 850; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); }
-      .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
-      .field { display: grid; gap: 6px; min-width: 0; }
-      .field.full { grid-column: 1 / -1; }
-      label { font-size: 0.76rem; font-weight: 720; color: var(--ink-soft); }
-      .field small { color: var(--muted); margin-top: -3px; font-size: 0.7rem; }
-      input, select {
-        width: 100%; height: 40px; border: 1px solid #cbd9e9; border-radius: 10px; background: #fff;
-        color: var(--ink); padding: 0 10px; outline: none; font-size: 0.92rem;
-      }
-      input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(44, 201, 181, 0.17); }
-      .control-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
-      .button {
-        min-height: 38px; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--ink);
-        padding: 0 12px; font-weight: 760; font-size: 0.8rem;
-      }
-      .button:hover { background: #f4f8fd; }
-      .button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
-      .button.primary:hover { background: #1d3153; }
-
-      .workspace { display: grid; gap: 17px; }
-      .decision {
-        position: relative; overflow: hidden; color: #fff; background: var(--ink); border: 0; border-radius: 22px;
-        padding: 25px; box-shadow: 0 18px 46px rgba(16, 32, 59, 0.25);
-      }
-      .decision::after { content: ""; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: rgba(184, 243, 74, 0.13); right: -90px; top: -135px; }
-      .decision > * { position: relative; }
-      .decision-label { margin: 0 0 8px; color: var(--lime); font-size: 0.76rem; font-weight: 850; letter-spacing: 0.1em; text-transform: uppercase; }
-      .decision h2 { font-size: clamp(1.35rem, 2.5vw, 1.85rem); max-width: 700px; }
-      .decision p { max-width: 720px; margin: 9px 0 0; color: #d5e0f0; line-height: 1.55; }
-      .decision-foot { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
-      .pill { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,0.1); color: #eef6ff; font-size: 0.78rem; font-weight: 700; }
-      .pill strong { color: var(--lime); }
-
-      .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
-      .metric { padding: 17px; border-radius: 17px; }
-      .metric .label { margin: 0; color: var(--muted); font-size: 0.76rem; font-weight: 720; line-height: 1.3; }
-      .metric .value { margin: 8px 0 3px; font-size: clamp(1.23rem, 2.4vw, 1.8rem); line-height: 1; letter-spacing: -0.045em; font-weight: 850; }
-      .metric .hint { margin: 0; color: var(--muted); font-size: 0.72rem; }
-      .metric.positive .value { color: #227a68; }
-      .metric.negative { background: var(--danger-bg); border-color: #ffd6da; }
-      .metric.negative .value { color: var(--danger); }
-
-      .analysis-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 17px; }
-      .card { border-radius: 18px; padding: 20px; }
-      .card-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
-      .card-head p { margin: 3px 0 0; color: var(--muted); font-size: 0.78rem; }
-      .pl-list { display: grid; gap: 0; }
-      .pl-row { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
-      .pl-row:last-child { border-bottom: 0; }
-      .pl-row span:first-child { color: var(--ink-soft); }
-      .pl-row.total { margin-top: 3px; padding-top: 14px; font-weight: 850; font-size: 1rem; }
-      .pl-row.total span:first-child { color: var(--ink); }
-      .risk-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-      .risk-item { display: grid; grid-template-columns: 9px 1fr; gap: 10px; align-items: start; padding: 11px; border-radius: 11px; background: #f7faff; font-size: 0.84rem; line-height: 1.45; }
-      .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--teal); margin-top: 5px; }
-      .risk-item.warning .dot { background: #f0a54b; }
-      .risk-item.danger .dot { background: var(--danger); }
-      .summary-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border-radius: 13px; background: #effbf7; border: 1px solid #d1f0e6; }
-      .summary-bar p { margin: 0; font-size: 0.84rem; color: #1f5f53; }
-      .summary-bar strong { font-size: 1rem; white-space: nowrap; }
-      .footnote { margin: 0; color: var(--muted); font-size: 0.73rem; line-height: 1.45; }
-
-      @media (max-width: 1050px) { .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-      @media (max-width: 820px) { .layout, .analysis-grid { grid-template-columns: 1fr; } .panel { order: 2; } .topbar { align-items: flex-start; } .top-note { text-align: left; max-width: 190px; } }
-      @media (max-width: 510px) { .shell { padding: 17px; } .topbar { display: grid; } .fields, .metric-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .decision, .panel, .card { padding: 18px; } .summary-bar { align-items: flex-start; flex-direction: column; } }
+      :root { --ink:#10213d; --ink-2:#263a5b; --ice:#f5f9ff; --surface:#fff; --line:#dce6f2; --muted:#63738b; --lime:#c0f653; --mint:#20bea7; --danger:#c6465a; --warn:#c67d22; --shadow:0 16px 40px rgba(16,33,61,.12); }
+      * { box-sizing:border-box; }
+      body { margin:0; min-width:320px; color:var(--ink); background:linear-gradient(135deg,#edf5ff 0%,#f8fbff 48%,#effcf5 100%); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+      button,input,select { font:inherit; } button { cursor:pointer; }
+      .shell { max-width:1440px; margin:0 auto; padding:28px; }
+      .top { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:23px; }
+      .brand { display:flex; align-items:center; gap:13px; } .mark { width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:var(--ink);color:var(--lime);font-weight:900;font-size:1.22rem;box-shadow:0 8px 20px rgba(16,33,61,.23); }
+      .eyebrow { margin:0 0 3px;color:#63870d;font-size:.74rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase; } h1 { margin:0;font-size:clamp(1.45rem,2.8vw,2.15rem);letter-spacing:-.04em; } .top-note { max-width:315px;margin:0;color:var(--muted);font-size:.84rem;line-height:1.45;text-align:right; }
+      .layout { display:grid;grid-template-columns:minmax(305px,380px) minmax(0,1fr);gap:23px;align-items:start; }
+      .panel,.card { background:rgba(255,255,255,.94);border:1px solid var(--line);box-shadow:var(--shadow); }.panel { padding:21px;border-radius:21px; }.card { padding:19px;border-radius:17px; }
+      .panel-head { display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:17px; } h2 { margin:0;font-size:1.04rem;letter-spacing:-.02em; }.sub { margin:5px 0 0;color:var(--muted);font-size:.81rem;line-height:1.42; }.tag { padding:5px 8px;border:1px solid #dcefb9;border-radius:999px;background:#f5ffe5;color:#5a7e0a;font-size:.72rem;font-weight:800;white-space:nowrap; }
+      .group { border-top:1px solid var(--line);padding-top:15px;margin-top:15px; }.group:first-of-type { border:0;padding-top:0;margin-top:0; }.group-title { margin:0 0 10px;color:var(--ink-2);font-size:.72rem;font-weight:850;letter-spacing:.1em;text-transform:uppercase; }.fields { display:grid;grid-template-columns:1fr 1fr;gap:10px; }.field { display:grid;gap:5px;min-width:0; }.field.full { grid-column:1/-1; } label { color:var(--ink-2);font-size:.74rem;font-weight:750; } small { margin-top:-2px;color:var(--muted);font-size:.68rem; } input,select { width:100%;height:40px;border:1px solid #cad8e8;border-radius:10px;padding:0 10px;color:var(--ink);background:#fff;outline:none;font-size:.9rem; } input:focus,select:focus { border-color:var(--mint);box-shadow:0 0 0 3px rgba(32,190,167,.16); }
+      .preset-row { display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:18px; }.preset { min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:.73rem;font-weight:780;padding:6px; }.preset:hover,.preset.active { border-color:#b0d568;background:#f5ffe8; }.preset span { display:block;color:var(--muted);font-size:.63rem;font-weight:650;margin-top:2px; }
+      .workspace { display:grid;gap:15px; }.decision { overflow:hidden;position:relative;padding:24px;border-radius:21px;background:var(--ink);color:#fff;box-shadow:0 18px 45px rgba(16,33,61,.24); }.decision:after { content:"";position:absolute;width:265px;height:265px;border-radius:50%;right:-92px;top:-145px;background:rgba(192,246,83,.13); }.decision>* { position:relative; }.decision-label { margin:0 0 7px;color:var(--lime);font-size:.73rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase; }.decision h2 { font-size:clamp(1.3rem,2.6vw,1.82rem);max-width:700px; }.decision p { max-width:720px;margin:8px 0 0;color:#d7e3f2;line-height:1.54; }.chips { display:flex;flex-wrap:wrap;gap:8px;margin-top:17px; }.chip { padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.1);font-size:.76rem;font-weight:700; }.chip strong { color:var(--lime); }
+      .metrics { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px; }.metric .label { margin:0;color:var(--muted);font-size:.74rem;font-weight:720;line-height:1.3; }.metric .value { margin:8px 0 3px;font-size:clamp(1.2rem,2.3vw,1.75rem);line-height:1;letter-spacing:-.05em;font-weight:870; }.metric .hint { margin:0;color:var(--muted);font-size:.7rem;line-height:1.35; }.metric.positive .value { color:#18816e; }.metric.negative { border-color:#ffd7db;background:#fff3f4; }.metric.negative .value { color:var(--danger); }
+      .analysis { display:grid;grid-template-columns:1.14fr .86fr;gap:15px; }.card-head { display:flex;justify-content:space-between;align-items:start;gap:9px;margin-bottom:12px; }.card-head p { margin:3px 0 0;color:var(--muted);font-size:.77rem; }.row { display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.88rem; }.row span:first-child { color:var(--ink-2); }.row.total { margin-top:3px;padding-top:13px;border-bottom:0;font-size:1rem;font-weight:850; }.row.total span:first-child { color:var(--ink); }.checks { margin:0;padding:0;list-style:none;display:grid;gap:9px; }.check { display:grid;grid-template-columns:9px 1fr;gap:10px;padding:10px;border-radius:11px;background:#f6f9fd;font-size:.81rem;line-height:1.43; }.dot { width:9px;height:9px;margin-top:4px;border-radius:50%;background:var(--mint); }.check.warning .dot { background:var(--warn); }.check.danger .dot { background:var(--danger); }.summary { display:flex;justify-content:space-between;gap:14px;align-items:center;padding:13px 15px;border:1px solid #cceee3;border-radius:13px;background:#effbf7; }.summary p { margin:0;color:#1c6254;font-size:.83rem; }.summary strong { white-space:nowrap;font-size:.95rem; }.footnote { margin:0;color:var(--muted);font-size:.72rem;line-height:1.45; }
+      @media(max-width:1050px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr));}} @media(max-width:820px){.layout,.analysis{grid-template-columns:1fr;}.panel{order:2}.top{align-items:flex-start}.top-note{text-align:left;max-width:260px;}} @media(max-width:510px){.shell{padding:17px}.top{display:grid}.fields,.metrics{grid-template-columns:1fr}.field.full{grid-column:auto}.preset-row{grid-template-columns:1fr}.panel,.card,.decision{padding:18px}.summary{align-items:flex-start;flex-direction:column}}
     </style>
   </head>
   <body>
     <main class="shell">
-      <header class="topbar">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">W</div>
-          <div>
-            <p class="eyebrow">Pork and Garlic Ice Cream</p>
-            <h1>Winter Strategy Planner</h1>
-          </div>
-        </div>
-        <p class="top-note">Start with the Year 1 assumptions, then adjust the values until the Winter plan is worth launching.</p>
+      <header class="top">
+        <div class="brand"><div class="mark" aria-hidden="true">W</div><div><p class="eyebrow">Pork and Garlic Ice Cream Co.</p><h1>Official Winter Strategy Planner</h1></div></div>
+        <p class="top-note">Built from the official rules: cash timing, production limits, 10,000-unit requests, transport, bonus, tax and machine records.</p>
       </header>
-
       <div class="layout">
-        <aside class="panel" aria-label="Winter plan inputs">
-          <div class="panel-head">
-            <div>
-              <h2>Plan inputs</h2>
-              <p>Every field is editable. Results update immediately.</p>
-            </div>
-            <span class="tag">Winter only</span>
-          </div>
-
-          <div class="inputs">
-            <section class="input-group" aria-labelledby="setup-title">
-              <h3 id="setup-title" class="group-title">Your setup</h3>
-              <div class="fields">
-                <div class="field">
-                  <label for="premise">Premise</label>
-                  <select id="premise"><option>Premise D</option><option>Premise A</option><option>Premise B</option><option>Premise C</option></select>
-                </div>
-                <div class="field">
-                  <label for="machine">Machine</label>
-                  <select id="machine"><option>Machine 1</option><option>Machine 2</option><option>Machine 3</option></select>
-                </div>
-                <div class="field">
-                  <label for="milk">Milk purchased</label>
-                  <input id="milk" type="number" min="0" step="0.1" value="2" inputmode="decimal" />
-                  <small>tonnes</small>
-                </div>
-                <div class="field">
-                  <label for="yield">Yield per tonne</label>
-                  <input id="yield" type="number" min="0" step="100" value="20000" inputmode="numeric" />
-                  <small>ice creams</small>
-                </div>
-              </div>
-            </section>
-
-            <section class="input-group" aria-labelledby="sales-title">
-              <h3 id="sales-title" class="group-title">Sales plan</h3>
-              <div class="fields">
-                <div class="field">
-                  <label for="target">Target sales</label>
-                  <input id="target" type="number" min="0" step="100" value="40000" inputmode="numeric" />
-                  <small>ice creams</small>
-                </div>
-                <div class="field">
-                  <label for="sellThrough">Expected sell-through</label>
-                  <input id="sellThrough" type="number" min="0" max="100" step="1" value="100" inputmode="numeric" />
-                  <small>percent of target</small>
-                </div>
-                <div class="field full">
-                  <label for="price">Selling price per ice cream</label>
-                  <input id="price" type="number" min="0" step="0.05" value="2" inputmode="decimal" />
-                </div>
-              </div>
-            </section>
-
-            <section class="input-group" aria-labelledby="costs-title">
-              <h3 id="costs-title" class="group-title">Winter costs</h3>
-              <div class="fields">
-                <div class="field"><label for="milkCost">Milk cost per tonne</label><input id="milkCost" type="number" min="0" step="100" value="20000" inputmode="decimal" /></div>
-                <div class="field"><label for="maintenance">Maintenance</label><input id="maintenance" type="number" min="0" step="100" value="1800" inputmode="decimal" /></div>
-                <div class="field"><label for="marketing">Marketing</label><input id="marketing" type="number" min="0" step="100" value="1000" inputmode="decimal" /></div>
-                <div class="field"><label for="salaries">Salaries</label><input id="salaries" type="number" min="0" step="100" value="10000" inputmode="decimal" /></div>
-                <div class="field"><label for="rent">Premise rent</label><input id="rent" type="number" min="0" step="100" value="17000" inputmode="decimal" /></div>
-                <div class="field"><label for="depreciation">Depreciation</label><input id="depreciation" type="number" min="0" step="100" value="4375" inputmode="decimal" /></div>
-              </div>
-            </section>
-
-            <section class="input-group" aria-labelledby="funding-title">
-              <h3 id="funding-title" class="group-title">Funding</h3>
-              <div class="fields">
-                <div class="field"><label for="cash">Starting cash</label><input id="cash" type="number" min="0" step="100" value="0" inputmode="decimal" /></div>
-                <div class="field"><label for="interest">Loan interest</label><input id="interest" type="number" min="0" max="100" step="0.5" value="8" inputmode="decimal" /><small>annual percent</small></div>
-                <div class="field full"><label for="buffer">Safety buffer</label><input id="buffer" type="number" min="0" max="100" step="1" value="10" inputmode="decimal" /><small>added to the upfront cash gap</small></div>
-              </div>
-            </section>
-          </div>
-
-          <div class="control-row">
-            <button class="button" id="reset" type="button">Reset Year 1 plan</button>
-            <button class="button primary" id="breakEvenPrice" type="button">Set break-even price</button>
-          </div>
+        <aside class="panel" aria-label="Official Winter plan inputs">
+          <div class="panel-head"><div><h2>Locked-decision inputs</h2><p class="sub">Use the team’s choice before the trainer reveals market allocation.</p></div><span class="tag">Official Winter</span></div>
+          <section class="group"><h3 class="group-title">Recorded team decision</h3><div class="preset-row"><button type="button" class="preset active" data-plan="team">Winter record<span>30,000 actually sold</span></button><button type="button" class="preset" data-plan="fullRequest">Full request<span>40,000 sold</span></button></div></section>
+          <section class="group"><h3 class="group-title">Opening choice</h3><div class="fields"><div class="field"><label for="year">Planning year</label><select id="year"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option></select><small id="forecastHint">Winter forecast: Shown below</small></div><div class="field"><label for="premise">Premise</label><select id="premise"></select><small id="premiseHint"></small></div><div class="field"><label for="machine">Machine</label><select id="machine"></select><small id="machineHint"></small></div><div class="field"><label for="openingCash">Opening cash</label><input id="openingCash" type="number" min="0" step="100" value="100000" /><small>official restart: Sh 100,000</small></div></div></section>
+          <section class="group"><h3 class="group-title">Production and market</h3><div class="fields"><div class="field"><label for="milk">Milk purchased</label><input id="milk" type="number" min="1" step="0.5" value="4" /><small>4 tons: capacity is still limited by the machine</small></div><div class="field"><label for="milkSpend">Milk spend recorded</label><input id="milkSpend" type="number" min="0" step="100" value="40000" /><small>Team record; official rate is Sh 20,000 per ton</small></div><div class="field"><label for="request">Requested sales</label><input id="request" type="number" min="0" step="10000" value="40000" /><small>must be 10,000-unit blocks</small></div><div class="field"><label for="sold">Actual sales</label><input id="sold" type="number" min="0" step="10000" value="30000" /><small>30,000 of the 40,000 request sold</small></div><div class="field"><label for="market">Market investment</label><input id="market" type="number" min="1000" step="100" value="5000" /><small>team decision: Sh 5,000</small></div></div></section>
+          <section class="group"><h3 class="group-title">Loans and tax losses</h3><div class="fields"><div class="field"><label for="loanReceived">Loan received</label><input id="loanReceived" type="number" min="0" step="100" value="0" /><small>cash flow only</small></div><div class="field"><label for="bankPayment">Bank payment</label><input id="bankPayment" type="number" min="0" step="100" value="0" /><small>principal + interest</small></div><div class="field"><label for="loanInterest">Loan interest</label><input id="loanInterest" type="number" min="0" step="100" value="0" /><small>P&amp;L expense only</small></div><div class="field"><label for="lossPool">Tax-loss pool</label><input id="lossPool" type="number" min="0" step="100" value="0" /><small>carried forward from prior seasons</small></div></div></section>
         </aside>
-
-        <section class="workspace" aria-label="Winter strategy results">
-          <section class="decision" aria-live="polite">
-            <p class="decision-label">Recommended decision</p>
-            <h2 id="decisionTitle">Checking the plan...</h2>
-            <p id="decisionText"></p>
-            <div class="decision-foot">
-              <span class="pill">Capacity: <strong id="capacityChip">—</strong></span>
-              <span class="pill">Break-even: <strong id="breakEvenChip">—</strong></span>
-              <span class="pill">Loan: <strong id="loanChip">—</strong></span>
-            </div>
-          </section>
-
-          <section class="metric-grid" aria-label="Key outcomes">
-            <article class="card metric" id="profitMetric"><p class="label">Projected net profit</p><p class="value" id="netProfit">—</p><p class="hint" id="profitHint">including depreciation and estimated interest</p></article>
-            <article class="card metric"><p class="label">Cash needed before sales</p><p class="value" id="cashNeed">—</p><p class="hint">costs less starting cash</p></article>
-            <article class="card metric"><p class="label">Recommended loan</p><p class="value" id="loan">—</p><p class="hint">cash gap plus safety buffer</p></article>
-            <article class="card metric"><p class="label">Forecast revenue</p><p class="value" id="revenue">—</p><p class="hint" id="soldHint">—</p></article>
-          </section>
-
-          <section class="analysis-grid">
-            <article class="card">
-              <div class="card-head"><div><h2>Profit and loss</h2><p>Forecast for this Winter scenario</p></div></div>
-              <div class="pl-list">
-                <div class="pl-row"><span>Revenue</span><strong id="plRevenue">—</strong></div>
-                <div class="pl-row"><span>Milk</span><strong id="plMilk">—</strong></div>
-                <div class="pl-row"><span>Maintenance, marketing, salaries and rent</span><strong id="plOperations">—</strong></div>
-                <div class="pl-row"><span>Depreciation</span><strong id="plDepreciation">—</strong></div>
-                <div class="pl-row"><span>Estimated loan interest</span><strong id="plInterest">—</strong></div>
-                <div class="pl-row total"><span>Projected net profit</span><strong id="plProfit">—</strong></div>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head"><div><h2>Decision checks</h2><p>What could change the outcome</p></div></div>
-              <ul class="risk-list" id="checks"></ul>
-            </article>
-          </section>
-
-          <div class="summary-bar">
-            <p id="summaryText">Update inputs to compare your options.</p>
-            <strong id="summaryValue">—</strong>
-          </div>
-          <p class="footnote">The loan estimate covers upfront cash costs and the selected safety buffer. It is a planning guide, not a bank offer. Edit the assumptions to match the Year 2 rules when you have them.</p>
+        <section class="workspace" aria-label="Winter results">
+          <section class="decision" aria-live="polite"><p class="decision-label">Rule-checked decision</p><h2 id="decisionTitle">Checking the plan...</h2><p id="decisionText"></p><div class="chips"><span class="chip">Eligible request: <strong id="eligibleChip">—</strong></span><span class="chip">Advance cash: <strong id="advanceChip">—</strong></span><span class="chip">Demand range: <strong id="demandChip">—</strong></span></div></section>
+          <section class="metrics" aria-label="Key outcomes"><article class="card metric" id="profitMetric"><p class="label">Recorded net result</p><p class="value" id="netProfit">—</p><p class="hint" id="profitHint">after bonus and tax</p></article><article class="card metric"><p class="label">Closing cash</p><p class="value" id="closingCash">—</p><p class="hint">cash-flow result</p></article><article class="card metric"><p class="label">Cash needed before market</p><p class="value" id="advanceCost">—</p><p class="hint">machine, milk and market</p></article><article class="card metric"><p class="label">Full-request outcome</p><p class="value" id="downsideProfit">—</p><p class="hint" id="downsideHint">if all 40,000 units had sold</p></article></section>
+          <section class="analysis"><article class="card"><div class="card-head"><div><h2>Profit and loss</h2><p>Posted in whole shekels under the official rules</p></div></div><div class="pl"><div class="row"><span>Revenue</span><strong id="plRevenue">—</strong></div><div class="row"><span>Milk, maintenance and depreciation</span><strong id="plProduction">—</strong></div><div class="row"><span>Gross profit</span><strong id="plGross">—</strong></div><div class="row"><span>Transport, market investment and bonus</span><strong id="plMarket">—</strong></div><div class="row"><span>Salaries, rent and loan interest</span><strong id="plFixed">—</strong></div><div class="row"><span>Game tax</span><strong id="plTax">—</strong></div><div class="row total"><span>Net profit</span><strong id="plNet">—</strong></div></div></article><article class="card"><div class="card-head"><div><h2>Decision checks</h2><p>Read these before locking the certificate</p></div></div><ul class="checks" id="checks"></ul></article></section>
+          <div class="summary"><p id="summaryText">Update the inputs to compare alternatives.</p><strong id="summaryValue">—</strong></div><p class="footnote">Actual sales are set by the trainer after decisions are locked. If actual allocation differs, enter it in “Expected actual sales” and use the result to update the team record. Machine purchases and loan principal stay out of profit and loss but remain in cash flow.</p>
         </section>
       </div>
     </main>
-
     <script>
-      const defaults = { milk: 2, yield: 20000, target: 40000, sellThrough: 100, price: 2, milkCost: 20000, maintenance: 1800, marketing: 1000, salaries: 10000, rent: 17000, depreciation: 4375, cash: 0, interest: 8, buffer: 10 };
-      const ids = Object.keys(defaults);
-      const money = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-      const count = new Intl.NumberFormat('en-IE', { maximumFractionDigits: 0 });
-      const number = (id) => Math.max(0, Number(document.getElementById(id).value) || 0);
-      const currency = (value) => money.format(value);
-
-      function addCheck(tone, text) {
-        const list = document.getElementById('checks');
-        const item = document.createElement('li');
-        item.className = `risk-item ${tone}`;
-        item.innerHTML = `<span class="dot" aria-hidden="true"></span><span>${text}</span>`;
-        list.appendChild(item);
+      const premises = { A:{rent:12000,transport:.3,slots:1}, B:{rent:10000,transport:.4,slots:1}, C:{rent:12000,transport:.3,slots:1}, D:{rent:17000,transport:.1,slots:1}, E:{rent:15000,transport:.2,slots:2}, F:{rent:16000,transport:.2,slots:3} };
+      const machines = { 1:{capacity:72000,purchase:35000,maintenance:1800,depreciation:4375}, 2:{capacity:120000,purchase:95000,maintenance:2900,depreciation:11875}, 3:{capacity:68000,purchase:38000,maintenance:2100,depreciation:4750}, 4:{capacity:95000,purchase:70000,maintenance:2900,depreciation:8750}, 5:{capacity:45000,purchase:28000,maintenance:1300,depreciation:3500}, 6:{capacity:110000,purchase:90000,maintenance:2900,depreciation:11250} };
+      const forecasts = {1:280000,2:410000,3:540000};
+      const plans = { team:{premise:'D',machine:'1',milk:4,milkSpend:40000,request:40000,sold:30000,market:5000}, fullRequest:{premise:'D',machine:'1',milk:4,milkSpend:40000,request:40000,sold:40000,market:5000} };
+      const $$ = id => document.getElementById(id); const inputs = ['year','premise','machine','openingCash','milk','milkSpend','request','sold','market','loanReceived','bankPayment','loanInterest','lossPool'];
+      const n = id => Math.max(0,Number($$(id).value)||0); const rounded = value => Math.round(value); const num = new Intl.NumberFormat('en-IE',{maximumFractionDigits:0}); const sh = value => `${value < 0 ? '-' : ''}Sh ${num.format(Math.abs(rounded(value)))}`;
+      function addOption(select,value,label){const option=document.createElement('option');option.value=value;option.textContent=label;select.appendChild(option)}
+      Object.keys(premises).forEach(key=>addOption($$('premise'),key,`Premise ${key}`)); Object.keys(machines).forEach(key=>addOption($$('machine'),key,`Machine ${key}`));
+      function calculate(actualSales){
+        const premise = premises[$$('premise').value], machine = machines[$$('machine').value], milk = n('milk'), milkSpend = n('milkSpend'), market = n('market');
+        const production = rounded(Math.min(milk*20000,machine.capacity)); const request = n('request'); const eligible = Math.floor(Math.min(request,production)/10000)*10000; const sold = Math.min(eligible,actualSales === undefined ? n('sold') : actualSales);
+        const revenue=rounded(sold*2), officialMilkCost=rounded(milk*20000), milkCost=rounded(milkSpend), maintenance=machine.maintenance, depreciation=machine.depreciation;
+        const gross=rounded(revenue-milkCost-maintenance-depreciation), bonus=gross>0?rounded(gross*.05):0, transport=rounded(sold*premise.transport), salaries=10000, rent=premise.rent, interest=rounded(n('loanInterest'));
+        const profitBeforeTax=rounded(gross-transport-market-bonus-salaries-rent-interest), lossPool=n('lossPool'), lossUsed=Math.min(Math.max(0,profitBeforeTax),lossPool), taxable=rounded(Math.max(0,profitBeforeTax-lossUsed)), tax=rounded(taxable*.1), net=rounded(profitBeforeTax-tax);
+        const opening=n('openingCash'), loan=n('loanReceived'), bank=rounded(n('bankPayment')), advance=rounded(machine.purchase+milkCost+market), advanceGap=Math.max(0,advance-opening-loan), closing=rounded(opening+loan+revenue-machine.purchase-milkCost-market-rent-maintenance-transport-salaries-bonus-bank-tax);
+        return {premise,machine,milk,milkCost,officialMilkCost,market,production,request,eligible,sold,revenue,maintenance,depreciation,gross,bonus,transport,salaries,rent,interest,profitBeforeTax,lossUsed,tax,net,opening,loan,bank,advance,advanceGap,closing,validRequest:request>=0&&request%10000===0&&request<=production&&request===eligible,validMarket:market>=1000};
       }
-
-      function update() {
-        const milk = number('milk');
-        const yieldPerTonne = number('yield');
-        const target = number('target');
-        const sellThrough = Math.min(100, number('sellThrough')) / 100;
-        const price = number('price');
-        const milkCost = number('milkCost');
-        const maintenance = number('maintenance');
-        const marketing = number('marketing');
-        const salaries = number('salaries');
-        const rent = number('rent');
-        const depreciation = number('depreciation');
-        const startingCash = number('cash');
-        const interestRate = number('interest') / 100;
-        const buffer = number('buffer') / 100;
-
-        const production = milk * yieldPerTonne;
-        const targetAfterDemand = target * sellThrough;
-        const forecastSold = Math.min(production, targetAfterDemand);
-        const revenue = forecastSold * price;
-        const milkSpend = milk * milkCost;
-        const operatingCosts = maintenance + marketing + salaries + rent;
-        const cashCosts = milkSpend + operatingCosts;
-        const cashGap = Math.max(0, cashCosts - startingCash);
-        const recommendedLoan = Math.ceil((cashGap * (1 + buffer)) / 100) * 100;
-        const estimatedInterest = recommendedLoan * interestRate;
-        const netProfit = revenue - cashCosts - depreciation - estimatedInterest;
-        const breakEvenUnits = price > 0 ? Math.ceil((cashCosts + depreciation + estimatedInterest) / price) : 0;
-        const breakEvenPrice = forecastSold > 0 ? (cashCosts + depreciation + estimatedInterest) / forecastSold : 0;
-        const capacityGap = Math.max(0, targetAfterDemand - production);
-
-        document.getElementById('netProfit').textContent = currency(netProfit);
-        document.getElementById('cashNeed').textContent = currency(cashGap);
-        document.getElementById('loan').textContent = currency(recommendedLoan);
-        document.getElementById('revenue').textContent = currency(revenue);
-        document.getElementById('soldHint').textContent = `${count.format(forecastSold)} forecast ice creams sold`;
-        document.getElementById('plRevenue').textContent = currency(revenue);
-        document.getElementById('plMilk').textContent = `−${currency(milkSpend)}`;
-        document.getElementById('plOperations').textContent = `−${currency(operatingCosts)}`;
-        document.getElementById('plDepreciation').textContent = `−${currency(depreciation)}`;
-        document.getElementById('plInterest').textContent = `−${currency(estimatedInterest)}`;
-        document.getElementById('plProfit').textContent = currency(netProfit);
-        document.getElementById('capacityChip').textContent = capacityGap ? `${count.format(capacityGap)} short` : `${count.format(production)} available`;
-        document.getElementById('breakEvenChip').textContent = `${count.format(breakEvenUnits)} units`;
-        document.getElementById('loanChip').textContent = currency(recommendedLoan);
-
-        const profitMetric = document.getElementById('profitMetric');
-        profitMetric.classList.toggle('positive', netProfit >= 0);
-        profitMetric.classList.toggle('negative', netProfit < 0);
-        document.getElementById('profitHint').textContent = netProfit >= 0 ? 'after every listed cost and estimated interest' : `needs ${currency(Math.abs(netProfit))} more to break even`;
-
-        const checks = document.getElementById('checks');
-        checks.innerHTML = '';
-        if (capacityGap > 0) addCheck('danger', `Your sales ambition needs ${count.format(capacityGap)} more ice creams than the available milk can produce. Buy more milk, improve yield, or lower the target.`);
-        else addCheck('', `Production capacity covers the demand forecast: ${count.format(production)} ice creams available for ${count.format(targetAfterDemand)} planned sales.`);
-        if (netProfit >= 0) addCheck('', `The scenario is profitable by ${currency(netProfit)} after depreciation and estimated interest.`);
-        else addCheck('danger', `At the current price and demand forecast, the plan loses ${currency(Math.abs(netProfit))}. A break-even price is ${currency(breakEvenPrice)} per ice cream.`);
-        if (cashGap > 0) addCheck('warning', `You need ${currency(cashGap)} before sales begin. With the ${Math.round(buffer * 100)}% buffer, the planning loan is ${currency(recommendedLoan)}.`);
-        else addCheck('', 'Starting cash covers the listed cash costs, so no loan is needed for this plan.');
-
-        let title, decision, summary;
-        if (capacityGap > 0) {
-          title = 'Revise the production plan before launching.';
-          decision = `The demand target exceeds Winter capacity by ${count.format(capacityGap)} ice creams. Fix capacity first, then re-check profitability.`;
-          summary = 'Capacity is the first constraint.';
-        } else if (netProfit >= 0) {
-          title = 'This Winter plan is ready to consider.';
-          decision = `The plan covers its costs and leaves a projected profit of ${currency(netProfit)}. Keep the loan close to ${currency(recommendedLoan)} and protect the expected sell-through.`;
-          summary = 'Profitable at the current assumptions.';
-        } else if (forecastSold >= breakEvenUnits * 0.95) {
-          title = 'The plan is close, but not profitable yet.';
-          decision = `You are within reach of break-even. Raise the price to about ${currency(breakEvenPrice)}, cut fixed costs, or lift sell-through before committing.`;
-          summary = 'A small improvement can change the result.';
-        } else {
-          title = 'Do not launch this version of the plan yet.';
-          decision = `The projected result is a loss of ${currency(Math.abs(netProfit))}. Test a higher price, stronger sales plan, lower costs, or a smaller commitment first.`;
-          summary = 'Revise the economics before committing.';
-        }
-        document.getElementById('decisionTitle').textContent = title;
-        document.getElementById('decisionText').textContent = decision;
-        document.getElementById('summaryText').textContent = summary;
-        document.getElementById('summaryValue').textContent = `Break-even price: ${currency(breakEvenPrice)}`;
+      function check(kind,text){const li=document.createElement('li');li.className=`check ${kind}`;li.innerHTML=`<span class="dot" aria-hidden="true"></span><span>${text}</span>`;$$('checks').appendChild(li)}
+      function update(){
+        const data=calculate(), year=n('year'), forecast=forecasts[year], downside=calculate(Math.min(data.request,data.eligible));
+        $$('premiseHint').textContent=`Sh ${premises[$$('premise').value].rent.toLocaleString()} rent · Sh ${premises[$$('premise').value].transport}/sold unit`;
+        $$('machineHint').textContent=`${num.format(data.machine.capacity)} capacity · Sh ${num.format(data.machine.purchase)} purchase`;
+        $$('forecastHint').textContent=`Winter forecast: ${num.format(forecast)} units`;
+        $$('eligibleChip').textContent=`${num.format(data.eligible)} units`; $$('advanceChip').textContent=sh(data.advance); $$('demandChip').textContent=`${num.format(forecast*.8)}–${num.format(forecast*1.2)}`;
+        $$('netProfit').textContent=sh(data.net); $$('closingCash').textContent=sh(data.closing); $$('advanceCost').textContent=sh(data.advance); $$('downsideProfit').textContent=sh(downside.net); $$('downsideHint').textContent=`if all ${num.format(data.eligible)} eligible units had sold`;
+        const metric=$$('profitMetric');metric.classList.toggle('positive',data.net>=0);metric.classList.toggle('negative',data.net<0); $$('profitHint').textContent=data.net>=0?'after bonus and game tax':`loss pool grows by ${sh(Math.abs(data.profitBeforeTax))}`;
+        $$('plRevenue').textContent=sh(data.revenue); $$('plProduction').textContent=`−${sh(data.milkCost+data.maintenance+data.depreciation)}`; $$('plGross').textContent=sh(data.gross); $$('plMarket').textContent=`−${sh(data.transport+data.market+data.bonus)}`; $$('plFixed').textContent=`−${sh(data.salaries+data.rent+data.interest)}`; $$('plTax').textContent=`−${sh(data.tax)}`; $$('plNet').textContent=sh(data.net);
+        $$('checks').innerHTML='';
+        if(!data.validRequest) check('danger',`Request ${num.format(data.request)} is not eligible. It must be a 10,000-unit block and no greater than the ${num.format(data.production)} units you can produce.`); else check('',`Production certificate works: ${num.format(data.production)} units can be produced and ${num.format(data.eligible)} can be requested.`);
+        if(!data.validMarket) check('danger','Market investment must be at least Sh 1,000 to participate.'); else check('',`The selected Sh ${num.format(data.market)} market investment is recorded as a cost before the market.`);
+        if(data.milkCost!==data.officialMilkCost) check('warning',`The team record uses ${sh(data.milkCost)} for ${data.milk} tons of milk. The official rate is Sh 20,000 per ton, which would be ${sh(data.officialMilkCost)}. Confirm this difference with the trainer before final scoring.`); else check('',`Milk cost matches the official Sh 20,000-per-ton rate.`);
+        if(data.advanceGap>0) check('danger',`Cash is short by ${sh(data.advanceGap)} before the market. Take a loan before the advance payment and include its first bank payment.`); else check('',`Opening cash and planned borrowing cover the Sh ${num.format(data.advance)} advance commitments, so no funding gap opens before the market.`);
+        if(data.sold<data.eligible) check('warning',`The result uses ${num.format(data.sold)} actual sales, not the full request. Unused milk and unsold ice cream spoil at season end.`); else check('',`This forecast assumes the trainer allocates the full ${num.format(data.eligible)} requested units. Actual allocation can be lower when total requests exceed demand.`);
+        let title,text,summary;
+        if(!data.validRequest||!data.validMarket){title='Fix the certificate before locking it.';text='The market request or investment does not meet the official conditions.';summary='The plan is not ready to submit.'}
+        else if(data.advanceGap>0){title='Fund the advance payments before launching.';text=`The plan needs ${sh(data.advanceGap)} more before the machine, milk and market payments. Borrow before those payments, then add the first bank payment.`;summary='Funding is the first constraint.'}
+        else if(data.net<=0){title='Revise the plan before locking it.';text=`With ${num.format(data.sold)} expected sales, this scenario produces a ${sh(Math.abs(data.net))} net loss.`;summary='The present scenario is not profitable.'}
+        else {title='Recorded Winter decision: cash-positive after the market.';text=`Premise ${$$('premise').value}, Machine ${$$('machine').value}, ${data.milk} tons, a ${num.format(data.eligible)}-unit request and ${num.format(data.sold)} actual sales leave ${sh(data.closing)} cash. No loan is needed for the listed advance costs.`;summary='Use the warning above to reconcile milk cost before final scoring.'}
+        $$('decisionTitle').textContent=title;$$('decisionText').textContent=text;$$('summaryText').textContent=summary;$$('summaryValue').textContent=`Closing cash: ${sh(data.closing)}`;
       }
-
-      ids.forEach((id) => document.getElementById(id).addEventListener('input', update));
-      document.getElementById('breakEvenPrice').addEventListener('click', () => {
-        const sold = Math.min(number('milk') * number('yield'), number('target') * Math.min(100, number('sellThrough')) / 100);
-        const costs = number('milk') * number('milkCost') + number('maintenance') + number('marketing') + number('salaries') + number('rent') + number('depreciation');
-        const cashGap = Math.max(0, (number('milk') * number('milkCost') + number('maintenance') + number('marketing') + number('salaries') + number('rent')) - number('cash'));
-        const loan = Math.ceil((cashGap * (1 + number('buffer') / 100)) / 100) * 100;
-        const price = sold ? (costs + loan * (number('interest') / 100)) / sold : 0;
-        document.getElementById('price').value = Math.ceil(price / 0.05) * 0.05;
-        update();
-      });
-      document.getElementById('reset').addEventListener('click', () => {
-        Object.entries(defaults).forEach(([id, value]) => { document.getElementById(id).value = value; });
-        document.getElementById('premise').value = 'Premise D';
-        document.getElementById('machine').value = 'Machine 1';
-        update();
-      });
-      update();
+      inputs.forEach(id=>$$(''+id).addEventListener('input',update)); inputs.forEach(id=>$$(''+id).addEventListener('change',update));
+      document.querySelectorAll('[data-plan]').forEach(button=>button.addEventListener('click',()=>{const plan=plans[button.dataset.plan];$$('premise').value=plan.premise;$$('machine').value=plan.machine;$$('milk').value=plan.milk;$$('milkSpend').value=plan.milkSpend;$$('request').value=plan.request;$$('sold').value=plan.sold;$$('market').value=plan.market;document.querySelectorAll('[data-plan]').forEach(item=>item.classList.toggle('active',item===button));update()}));
+      $$('year').value='1';$$('openingCash').value=100000;$$('loanReceived').value=0;$$('bankPayment').value=0;$$('loanInterest').value=0;$$('lossPool').value=0;$$('premise').value='D';$$('machine').value='1';update();
     </script>
   </body>
 </html>
