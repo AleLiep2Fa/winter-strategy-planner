@@ -1,17 +1,12 @@
-# Winter Strategy Planner
+# Year 2 Winter Strategy Planner
 
-A browser-based, rule-checked planner for the Pork and Garlic Ice Cream official Winter strategy.
+A browser-based decision tool for the Pork and Garlic Ice Cream Year 2 Winter market.
 
-The recorded Year 1 Winter team decision is:
+It carries the recorded Winter result forward provisionally: Sh 47,509 cash, Machine 1 with seven remaining seasons, no loan, and a Sh 21,866 tax-loss pool. It also records the Year 1 Spring request of 60,000 units, Sh 5,000 market investment, and 40,000 actual sales. Replace these figures with the real Year 1 Autumn record before making the final decision.
 
-- Premise D
-- Machine 1
-- 4 tonnes of milk, with Sh 40,000 recorded as milk spend
-- 40,000 ice creams requested; 30,000 actually sold
-- Sh 5,000 market investment
-- No loan, using the official Sh 100,000 opening cash
+The tool compares a cautious 40,000-unit recovery request with a measured 60,000-unit growth request. It keeps Year 2 prices, premise costs, machine spending, sales allocation and borrowing editable because the Year 2 options have not yet been confirmed by the trainer.
 
-With the recorded 30,000 sales, the model shows a Sh 21,866 loss and Sh 47,509 closing cash. If all 40,000 requested ice creams had sold, the model shows a Sh 65,509 closing cash balance (but still a Sh 3,866 loss). The planner flags that the official rules list milk at Sh 20,000 per ton, while the recorded team spend is Sh 40,000 for four tons; confirm that difference with the trainer before final scoring.
+The initial strategy is to retain Machine 1 and Premise D, avoid a new machine and loan, and choose capacity only after considering a lower allocation. Year 2 Winter forecast demand is 410,000 units, with a 328,000–492,000 range, but the trainer's allocation and ranking still determine actual sales.
 
 ## Publish with GitHub and Vercel
 
