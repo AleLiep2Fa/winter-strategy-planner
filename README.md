@@ -1,12 +1,16 @@
-# Year 2 Winter Strategy Planner
+# Year 1 Market Ledger and Year 2 Planner
 
-A browser-based decision tool for the Pork and Garlic Ice Cream Year 2 Winter market.
+A clean Year 1 seasonal ledger for Pork and Garlic Ice Cream Co., followed by an editable Year 2 Winter planning area.
 
-It includes a calculated Year 1 Winter market record: 40,000 requested units, 30,000 actual sales, Sh 5,000 market investment, four tons of milk with Sh 40,000 recorded spend, Machine 1 purchased for Sh 35,000, Sh 21,866 net loss, and Sh 47,509 closing cash. It also records the Year 1 Spring request of 60,000 units, Sh 5,000 market investment, and 40,000 actual sales. An editable Year 1 opening-cash ledger includes Winter, Spring, Summer, and Autumn. Replace these figures with the real Year 1 Autumn record before making the final decision.
+The corrected Year 1 records use Premise D, Machine 5, and the official milk rate of Sh 20,000 per ton:
 
-The tool compares a cautious 40,000-unit recovery request with a measured 60,000-unit growth request. It keeps Year 2 prices, premise costs, machine spending, sales allocation and borrowing editable because the Year 2 options have not yet been confirmed by the trainer. A cash-flow section separates advance payments from sales receipts and end-of-season rent, maintenance, transport, salaries, bonus, bank payment, and tax.
+- Winter: 2 tons, 40,000 request, 30,000 sold, Sh 5,000 marketing, and Machine 5 purchased for Sh 28,000.
+- Spring: 3 tons, 60,000 request, 40,000 sold, and Sh 7,000 marketing.
+- Summer: 2 tons, no sales, and Sh 5,000 marketing.
 
-The initial strategy is to retain Machine 1 and Premise D, avoid a new machine and loan, and choose capacity only after considering a lower allocation. Year 2 Winter forecast demand is 410,000 units, with a 328,000–492,000 range, but the trainer's allocation and ranking still determine actual sales.
+Each record shows the complete cash-flow sequence: loans received, machine purchased, milk purchased, market investment, cash after advance payments, rent, maintenance, transport, fixed salaries, bonus, bank principal plus interest, tax, net result, and closing cash.
+
+The Year 2 plan remains editable and carries Machine 5 forward. The Summer record intentionally highlights any negative cash position so a required loan and first bank payment can be recorded before continuing to Year 2.
 
 ## Publish with GitHub and Vercel
 
